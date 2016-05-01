@@ -14,6 +14,8 @@ Terraform module for provisioned CentOS 7 install on an OpenStack cloud with a L
   * public_key - The contents of your public key you want to use for your key-pair
   * key_file_path - The path to your private key of the above public key which will be used to login to the servers
   * servers - The number of servers you want to spin up
+  
+OpenStack Defaults
 
   * auth_url - The Identity Service URL of your OpenStack installation
   * user_login - The default user that is used on the your OpenStack image

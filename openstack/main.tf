@@ -20,8 +20,10 @@ resource "openstack_compute_floatingip_v2" "appserver_ip" {
 resource "openstack_compute_instance_v2" "appserver_node" {
   name = "${var.prefix}-node-${count.index}"
   region = "${var.region}"
-  image_id = "${lookup(var.image, var.region)}"
-  flavor_id = "${lookup(var.flavor, var.region)}"
+  image_id = "${var.image_id}"
+  image_name = "${var.image_name}"
+  flavor_id = "${var.flavor_id}"
+  flavor_name = "${var.flavor_name}"
   #floating_ip = "${element(openstack_compute_floatingip_v2.appserver_ip.*.address,count.index)}"
   key_pair = "${var.prefix}-keypair"
   count = "${var.servers}"

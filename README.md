@@ -34,20 +34,22 @@ OpenStack Defaults
       
       # Custom Config
       prefix = "app"
+      public_key = "${file("~/.ssh/id_rsa.pub")}"
+      key_file_path = "~/.ssh/id_rsa"
+      servers = "1"
+
+      # OpenStack config
       username = "${var.username}"
       tenant_name = "${var.tenant_name}"
       password = "${var.password}"
       region = "RegionOne"
-      public_key = "${file("~/.ssh/id_rsa.pub")}"
-      key_file_path = "~/.ssh/id_rsa"
-      servers = "1"
+      image_id = "c1e8c5b5-bea6-45e9-8202-b8e769b661a4"
+      flavor_id = "100"
 
       # OpenStack defaults
       auth_url = "https://iad2.dream.io:5000/v2.0"
       user_login = "dhc-user"
       pub_net_id = "public"
-      image = "c1e8c5b5-bea6-45e9-8202-b8e769b661a4"
-      flavor = "100"
     }
 
 # LICENSE

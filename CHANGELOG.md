@@ -1,4 +1,9 @@
 
+0.1.5 / 2016-05-16
+==================
+
+  * update readme, make db init generic, remove dreamcompute override
+
 0.1.4 / 2016-05-16
 ==================
 

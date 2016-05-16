@@ -17,10 +17,7 @@ variable "nb_of_nodes" {
 }
 
 variable "pub_net_id" {
-    default = {
-         tr2="PublicNetwork-01"
-         tr2-1 = ""
-    }
+    default = "PublicNetwork-01"
 }
 
 variable "region" {

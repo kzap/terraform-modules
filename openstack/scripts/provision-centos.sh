@@ -490,7 +490,8 @@ EOF
     # Process each mysqldump SQL file in database/backups to import
     # an initial data set for MySQL.
     if [[ -f "/tmp/provision/database/import-sql.sh" ]]; then
-      "/tmp/provision/database/import-sql.sh"
+      sudo chmod +x "/tmp/provision/database/import-sql.sh"
+      sudo "/tmp/provision/database/import-sql.sh"
     fi
   else
     echo -e "\nMySQL is not installed. No databases imported."

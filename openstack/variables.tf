@@ -28,18 +28,20 @@ variable "region" {
     description = "The region of openstack, for image/flavor/network lookups."
 }
 
-variable "image" {
-    default = {
-         tr2 = "eee08821-c95a-448f-9292-73908c794661"
-         tr2-1 = ""
-    }
+variable "image_id" {
+    default = "eee08821-c95a-448f-9292-73908c794661"
 }
 
-variable "flavor" {
-    default = {
-         tr2 = "100"
-         tr2-1 = ""
-    }
+variable "image_name" {
+    default = ""
+}
+
+variable "flavor_id" {
+    default = "200"
+}
+
+variable "flavor_name" {
+    default = ""
 }
 
 variable "servers" {

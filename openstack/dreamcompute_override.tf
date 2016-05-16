@@ -19,16 +19,10 @@ variable "region" {
     description = "The region of openstack, for image/flavor/network lookups."
 }
 
-variable "image" {
-    default = {
-         RegionOne = "c1e8c5b5-bea6-45e9-8202-b8e769b661a4"
-         RegionOne-1 = ""
-    }
+variable "image_id" {
+    default = "c1e8c5b5-bea6-45e9-8202-b8e769b661a4"
 }
 
-variable "flavor" {
-    default = {
-         RegionOne = "200"
-         RegionOne-1 = ""
-    }
+variable "flavor_id" {
+    default = "200"
 }

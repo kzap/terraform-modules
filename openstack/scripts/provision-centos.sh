@@ -427,11 +427,12 @@ apache_setup() {
     sudo mkdir -p "/etc/httpd/conf/sites-available/"
   fi
   sudo rsync -rvzh --delete "/tmp/provision/config/apache-config/sites-available/" "/etc/httpd/conf/sites-available/"
-  sudo rsync -rvzhl --delete "/tmp/provision/config/apache-config/sites-enabled/" "/etc/httpd/conf/sites-enabled/"
+  sudo mkdir -p "/etc/httpd/conf/sites-enabled/"
+  sudo ln -s /etc/httpd/conf/sites-available/* "/etc/httpd/conf/sites-enabled/"
 
   echo " * Copied /tmp/provision/config/apache-config/httpd.conf           to /etc/httpd/conf/httpd.conf"
   echo " * Rsync'd /tmp/provision/config/apache-config/sites-available/      to /etc/httpd/sites-available"
-  echo " * Rsync'd /tmp/provision/config/apache-config/sites-enabled/        to /etc/httpd/sites-enabled"
+  echo " * Linked /etc/httpd/sites-available        to /etc/httpd/sites-enabled"
 }
 
 phpmod_setup() {

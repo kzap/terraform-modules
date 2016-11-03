@@ -1,8 +1,9 @@
 # tf-lamp
 
-Terraform module for provisioned CentOS 7 install on an OpenStack cloud with a LAMP stack (Linux Apache MySQL PHP)
+Terraform module for provisioning a CentOS 7 install on an OpenStack cloud with a LAMP stack (Linux Apache MySQL PHP)
+At the moment a OpenStack provider is available with a bash provisioner for CentOS 7.
 
-## appserver
+## OpenStack
 
 ### Inputs
 
@@ -29,27 +30,40 @@ OpenStack Defaults
 
 ### Example
 
-    module "app" {
-      source = "github.com/kzap/tf-lamp/openstack"
+    module "openstack_app" {
+      source = "providers/openstack"
       
       # Custom Config
-      prefix = "app"
-      public_key = "${file("~/.ssh/id_rsa.pub")}"
-      key_file_path = "~/.ssh/id_rsa"
-      servers = "1"
-
+      prefix = "${var.env}-app"
+      public_key = "${file("${var.public_key_file}")}"
+      key_file_path = "${var.private_key_file}"
+      servers = "${var.openstack_app_servers}"
+      
       # OpenStack config
-      username = "${var.username}"
-      tenant_name = "${var.tenant_name}"
-      password = "${var.password}"
-      region = "RegionOne"
-      image_id = "c1e8c5b5-bea6-45e9-8202-b8e769b661a4"
-      flavor_id = "100"
+      username = "${var.openstack_username}"
+      tenant_name = "${var.openstack_tenant_name}"
+      password = "${var.openstack_password}"
+      region = "${var.openstack_region}"
+      image_id = "${var.openstack_app_image}"
+      flavor_id = "${var.openstack_app_flavor}"
 
       # OpenStack defaults
-      auth_url = "https://iad2.dream.io:5000/v2.0"
-      user_login = "dhc-user"
-      pub_net_id = "public"
+      auth_url = "${var.openstack_auth_url}"
+      user_login = "${var.openstack_user_login}"
+      pub_net_id = "${var.openstack_pub_net_id}"
+    }
+
+    module "centos_provisioner" {
+      source = "provisioners/bash/centos7"
+      
+      # Server Info
+      servers = "${var.openstack_app_servers}"
+      server_ips = ["${module.openstack_app.nodes_floating_ips}"]
+
+      # Login Information
+      user_login = "${var.openstack_user_login}"
+      public_key = "${file("${var.public_key_file}")}"
+      key_file_path = "${var.private_key_file}"
     }
 
 # LICENSE

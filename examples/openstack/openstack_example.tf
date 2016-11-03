@@ -21,6 +21,15 @@ module "openstack_app" {
     pub_net_id = "${var.openstack_pub_net_id}"
 }
 
-output "openstack_floating_ips" {
-  value = ["${module.openstack_app.nodes_floating_ips}"]
+module "centos_provisioner" {
+    source = "../../provisioners/bash/centos7"
+    
+    # Server Info
+    servers = "${var.openstack_app_servers}"
+    server_ips = ["${module.openstack_app.nodes_floating_ips}"]
+
+    # Login Information
+    user_login = "${var.openstack_user_login}"
+    public_key = "${file("${var.public_key_file}")}"
+    key_file_path = "${var.private_key_file}"
 }

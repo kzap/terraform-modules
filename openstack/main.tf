@@ -43,13 +43,13 @@ resource "openstack_compute_instance_v2" "appserver_node" {
     }
 
     provisioner "file" {
-        source = "${path.module}/scripts/provision"
+        source = "${path.module}/../scripts/provision"
         destination = "/tmp/provision"
     }
     
     provisioner "remote-exec" {
         scripts = [
-            "${path.module}/scripts/provision-centos.sh",
+            "${path.module}/../scripts/provision-centos.sh",
         ]
     }
     

@@ -2,3 +2,4 @@
 *.tfstate*
 *.tfvars
 !*.sample.tfvars
+crash.log

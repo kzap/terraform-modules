@@ -1,5 +1,5 @@
 module "openstack_app" {
-    source = "openstack"
+    source = "../../providers/openstack"
     
     # Custom Config
     prefix = "${var.env}-app"

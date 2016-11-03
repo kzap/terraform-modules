@@ -43,7 +43,7 @@ resource "openstack_compute_instance_v2" "appserver_node" {
   }
 
   provisioner "file" {
-      source = "${path.root}/scripts/provision"
+      source = "${path.module}/scripts/provision"
       destination = "/tmp/provision"
   }
   

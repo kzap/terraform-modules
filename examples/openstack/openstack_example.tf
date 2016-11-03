@@ -4,7 +4,7 @@ module "openstack_app" {
     # Custom Config
     prefix = "${var.env}-app"
     public_key = "${file("${var.public_key_file}")}"
-	key_file_path = "${var.private_key_file}"
+    key_file_path = "${var.private_key_file}"
     servers = "${var.openstack_app_servers}"
     
     # OpenStack config

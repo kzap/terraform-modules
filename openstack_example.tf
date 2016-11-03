@@ -22,5 +22,5 @@ module "openstack_app" {
 }
 
 output "openstack_floating_ips" {
-  value = "${module.openstack_app.nodes_floating_ips}"
+  value = ["${module.openstack_app.nodes_floating_ips}"]
 }

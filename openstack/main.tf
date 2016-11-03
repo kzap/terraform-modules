@@ -28,29 +28,29 @@ resource "openstack_compute_instance_v2" "appserver_node" {
   key_pair = "${var.prefix}-keypair"
   count = "${var.servers}"
 
-    connection {
-        user = "${var.user_login}"
-        private_key = "${var.key_file_path}"
-        timeout = "1m"
-    }
+  connection {
+      user = "${var.user_login}"
+      private_key = "${var.key_file_path}"
+      timeout = "1m"
+  }
 
-    provisioner "remote-exec" {
-        inline = [
-            "echo ${var.servers} > /tmp/server-count",
-            "echo ${count.index} > /tmp/server-index",
-            "echo ${openstack_compute_instance_v2.appserver_node.0.network.0.fixed_ip_v4} > /tmp/server-addr",
-        ]
-    }
+  provisioner "remote-exec" {
+      inline = [
+          "echo ${var.servers} > /tmp/server-count",
+          "echo ${count.index} > /tmp/server-index",
+          "echo ${openstack_compute_instance_v2.appserver_node.0.network.0.fixed_ip_v4} > /tmp/server-addr",
+      ]
+  }
 
-    provisioner "file" {
-        source = "${path.module}/../scripts/provision"
-        destination = "/tmp/provision"
-    }
-    
-    provisioner "remote-exec" {
-        scripts = [
-            "${path.module}/../scripts/provision-centos.sh",
-        ]
-    }
+  provisioner "file" {
+      source = "${path.root}/scripts/provision"
+      destination = "/tmp/provision"
+  }
+  
+  provisioner "remote-exec" {
+      scripts = [
+          "${path.root}/scripts/provision-centos.sh",
+      ]
+  }
     
 }

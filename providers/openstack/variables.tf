@@ -12,10 +12,6 @@ variable "prefix" {
     default = "apache"
 }
 
-variable "nb_of_nodes" {
-    default = "4"
-}
-
 variable "pub_net_id" {
     default = "PublicNetwork-01"
 }

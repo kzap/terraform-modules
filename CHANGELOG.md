@@ -1,4 +1,19 @@
 
+0.2 / 2016-11-03
+================
+
+  * fix indent
+  * updating readme
+  * changing network detection function in bash provisioner to make it use more checks if some programs are not available
+  * - make provisioner work using key_file_path and ${file()} - move provisioner into bash/centos7 so its specific to the os
+  * - reorganizing module into examples/ providers/ and provisioners/
+  * - making output a list - making module use ${path.root} for the provisioning scripts
+  * - adding output to example - converting openstack output of nodes_floating_ips to a list
+  * - adding openstack specific example with openstack_variables.tf and openstack_example.tf files - global_variables.tf is for variables used across all setups
+  * - adding example files for usage of module
+  * - moved provisioning scripts to base dir so it can be shared between providers
+  * fix output, remove escaped double quote
+
 0.1.7 / 2016-10-08
 ==================
 

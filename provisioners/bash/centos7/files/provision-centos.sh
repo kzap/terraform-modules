@@ -155,6 +155,8 @@ yum_package_check_list=(
   vim-enhanced
   colordiff
   postfix
+  wget
+  nc
 
   # ntp service to keep clock current
   ntp
@@ -188,17 +190,90 @@ yum_package_check_list=(
 
 ### FUNCTIONS
 
+portscan() {
+  tput setaf 6; echo "Starting port scan of $checkdomain port 80"; tput sgr0;
+  if nc -zw1 $checkdomain  80; then
+    tput setaf 2; echo "Port scan good, $checkdomain port 80 available"; tput sgr0;
+  else
+    echo "Port scan of $checkdomain port 80 failed."
+  fi
+}
+
+pingnet() {
+  #Google has the most reliable host name. Feel free to change it.
+  tput setaf 6; echo "Pinging $checkdomain to check for internet connection." && echo; tput sgr0;
+  ping $checkdomain -c 4
+
+  if [ $? -eq 0 ]
+    then
+      tput setaf 2; echo && echo "$checkdomain pingable. Internet connection is most probably available."&& echo ; tput sgr0;
+      #Insert any command you like here
+    else
+      echo && echo "Could not establish internet connection. Something may be wrong here." >&2
+      #Insert any command you like here
+#      exit 1
+  fi
+}
+
+pingdns() {
+  #Grab first DNS server from /etc/resolv.conf
+  tput setaf 6; echo "Pinging first DNS server in resolv.conf ($checkdns) to check name resolution" && echo; tput sgr0;
+  ping $checkdns -c 4
+    if [ $? -eq 0 ]
+    then
+      tput setaf 6; echo && echo "$checkdns pingable. Proceeding with domain check."; tput sgr0;
+      #Insert any command you like here
+    else
+      echo && echo "Could not establish internet connection to DNS. Something may be wrong here." >&2
+      #Insert any command you like here
+#     exit 1
+  fi
+}
+
+httpreq() {
+  tput setaf 6; echo && echo "Checking for HTTP Connectivity"; tput sgr0;
+  case "$(curl -s --max-time 2 -I $checkdomain | sed 's/^[^ ]*  *\([0-9]\).*/\1/; 1q')" in
+  [23]) tput setaf 2; echo "HTTP connectivity is up"; tput sgr0;;
+  5) echo "The web proxy won't let us through";exit 1;;
+  *)echo "Something is wrong with HTTP connections. Go check it."; exit 1;;
+  esac
+#  exit 0
+}
+
 network_detection() {
   # Network Detection
   #
   # Make an HTTP request to google.com to determine if outside access is available
-  # to us. If 3 attempts with a timeout of 5 seconds are not successful, then we'll
-  # skip a few things further in provisioning rather than create a bunch of errors.
-  if [[ "$(wget --tries=3 --timeout=5 --spider http://google.com 2>&1 | grep 'connected')" ]]; then
-    echo "Network connection detected..."
+  GW=`/sbin/ip route | awk '/default/ { print $3 }'`
+  checkdns=`cat /etc/resolv.conf | awk '/nameserver/ {print $2}' | awk 'NR == 1 {print; exit}'`
+  checkdomain=google.com
+  
+  #Ping gateway first to verify connectivity with LAN
+  tput setaf 6; echo "Pinging gateway ($GW) to check for LAN connectivity" && echo; tput sgr0;
+  if [ "$GW" = "" ]; then
+      tput setaf 1;echo "There is no gateway. Probably disconnected..."; tput sgr0;
+  #    exit 1
+  fi
+
+  ping $GW -c 4
+
+  if [ $? -eq 0 ]
+  then
+    tput setaf 6; echo && echo "LAN Gateway pingable. Proceeding with internet connectivity check."; tput sgr0;
+    pingdns
+    pingnet
+    portscan
+    httpreq
+    
     ping_result="Connected"
   else
-    echo "Network connection not detected. Unable to reach google.com..."
+    echo && echo "Something is wrong with LAN (Gateway unreachable)"
+    pingdns
+    pingnet
+    portscan
+    httpreq
+
+    #Insert any command you like here
     ping_result="Not Connected"
   fi
 }
@@ -345,18 +420,18 @@ tools_install() {
 nginx_setup() {
   # Create an SSL key and certificate for HTTPS support.
   if [[ ! -e /etc/nginx/server.key ]]; then
-	  echo "Generate Nginx server private key..."
-	  vvvgenrsa="$(openssl genrsa -out /etc/nginx/server.key 2048 2>&1)"
-	  echo "$vvvgenrsa"
+    echo "Generate Nginx server private key..."
+    vvvgenrsa="$(openssl genrsa -out /etc/nginx/server.key 2048 2>&1)"
+    echo "$vvvgenrsa"
   fi
   if [[ ! -e /etc/nginx/server.crt ]]; then
-	  echo "Sign the certificate using the above private key..."
-	  vvvsigncert="$(openssl req -new -x509 \
+    echo "Sign the certificate using the above private key..."
+    vvvsigncert="$(openssl req -new -x509 \
             -key /etc/nginx/server.key \
             -out /etc/nginx/server.crt \
             -days 3650 \
             -subj /CN=*.galleonph.dev/CN=*.galleonph.dashboard/CN=*.vvv.dev 2>&1)"
-	  echo "$vvvsigncert"
+    echo "$vvvsigncert"
   fi
 
   echo -e "\nSetup configuration files..."

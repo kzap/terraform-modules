@@ -28,10 +28,10 @@ OpenStack Defaults
 
   * nodes_floating_ips - a comma separated list of the public ips of your server nodes
 
-### Example
+### [OpenStack Example](./examples/openstack/openstack_example.tf)
 
     module "openstack_app" {
-      source = "providers/openstack"
+      source = "github.com/kzap/tf-lamp//providers/openstack"
       
       # Custom Config
       prefix = "${var.env}-app"
@@ -54,7 +54,7 @@ OpenStack Defaults
     }
 
     module "centos_provisioner" {
-      source = "provisioners/bash/centos7"
+      source = "github.com/kzap/tf-lamp//provisioners/bash/centos7"
       
       # Server Info
       servers = "${var.openstack_app_servers}"
@@ -65,6 +65,27 @@ OpenStack Defaults
       public_key = "${file("${var.public_key_file}")}"
       key_file_path = "${var.private_key_file}"
     }
+
+### [OpenStack Variables](./examples/openstack/openstack.sample.tfvars)
+
+    # Global Variables 
+    public_key_file = "/path/to/public-key"
+    private_key_file = "/path/to/private-key"
+
+    # OpenStack User Variables
+    openstack_username = "YOUR_OPENSTACK_USERNAME"
+    openstack_tenant_name = "YOUR_OPENSTACK_TENANT_NAME"
+    openstack_password = "YOUR_OPENSTACK_PASSWORD"
+    openstack_region = "YOUR_OPENSTACK_REGION"
+    openstack_app_servers = 1
+    openstack_app_image = "YOUR_OPENSTACK_PROVIDER_IMAGE"
+    openstack_app_flavor = "YOUR_OPENSTACK_PROVIDER_FLAVOR"
+
+    # OpenStack Provider Variables
+    openstack_user_login = "root"
+    openstack_auth_url = "YOUR_OPENSTACK_PROVIDER_IDENTITY_ENDPOINT"
+    openstack_pub_net_id = "public"
+
 
 # LICENSE
 

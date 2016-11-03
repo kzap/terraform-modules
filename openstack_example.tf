@@ -20,3 +20,7 @@ module "openstack_app" {
     user_login = "${var.openstack_user_login}"
     pub_net_id = "${var.openstack_pub_net_id}"
 }
+
+output "openstack_floating_ips" {
+  value = "${module.openstack_app.nodes_floating_ips}"
+}

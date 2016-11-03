@@ -1,4 +1,9 @@
 
+0.2.1 / 2016-11-03
+==================
+
+  * - make openstack example actually use github source
+
 0.2 / 2016-11-03
 ================
 

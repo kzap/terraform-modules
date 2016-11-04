@@ -1,35 +1,34 @@
 module "aws_app" {
-    source = "github.com/kzap/terraform-modules//providers/aws/app-server"
-    
+    #source = "github.com/kzap/terraform-modules//providers/aws/app-server"
+    source = "../../providers/aws/app-server"
+
     # Custom Config
+    servers = "${var.aws_app_servers}"
     prefix = "${var.env}-app"
     public_key = "${file("${var.public_key_file}")}"
     key_file_path = "${var.private_key_file}"
-    servers = "${var.openstack_app_servers}"
+    azs = "${var.aws_app_azs}"
+    ami_id = "${var.aws_app_ami_id}"
+    create_eip = "${var.aws_app_create_eip}"
+    instance_type = "${var.aws_app_instance_type}"
     
-    # OpenStack config
-    username = "${var.openstack_username}"
-    tenant_name = "${var.openstack_tenant_name}"
-    password = "${var.openstack_password}"
-    region = "${var.openstack_region}"
-    image_id = "${var.openstack_app_image}"
-    flavor_id = "${var.openstack_app_flavor}"
-
-    # OpenStack defaults
-    auth_url = "${var.openstack_auth_url}"
-    user_login = "${var.openstack_user_login}"
-    pub_net_id = "${var.openstack_pub_net_id}"
+    # AWS config
+    access_key = "${var.aws_access_key}"
+    secret_key = "${var.aws_secret_key}"
+    region = "${var.aws_region}"
+    
 }
 
 module "centos_app_provisioner" {
-    source = "github.com/kzap/terraform-modules//provisioners/bash/centos-7/app-server"
+    #source = "github.com/kzap/terraform-modules//provisioners/bash/centos-7/app-server"
+    source = "../../provisioners/bash/centos-7/app-server"
     
     # Server Info
-    servers = "${var.openstack_app_servers}"
-    server_ips = ["${module.openstack_app.nodes_floating_ips}"]
+    servers = "${var.aws_app_servers}"
+    server_ips = ["${module.aws_app.ec2_ips}"]
 
     # Login Information
-    user_login = "${var.openstack_user_login}"
+    user_login = "${var.aws_app_user_login}"
     public_key = "${file("${var.public_key_file}")}"
     key_file_path = "${var.private_key_file}"
 }

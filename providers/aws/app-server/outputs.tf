@@ -1,3 +1,11 @@
-output "nodes_floating_ips" {
-	value = ["${openstack_compute_instance_v2.appserver_node.*.network.0.fixed_ip_v4}"]
+output "ec2_ips" {
+	value = ["${aws_instance.appserver_node.*.public_ip}"]
+}
+
+output "ec2_eips" {
+	value = ["${aws_eip.appserver_eip.*.public_ip}"]
+}
+
+output "ec2_ids" {
+	value = ["${aws_instance.appserver_node.*.id}"]
 }

@@ -6,23 +6,18 @@ provider "aws" {
 
 resource "aws_instance" "appserver_node" {
     ami = "${var.ami_id}"
-    subnet_id = "${var.subnet_id}"
+    availability_zone = "${element(var.azs, count.index)}"
+    instance_type = "${var.instance_type}"
+    user_data = "${var.user_data}"
+    tags {
+        Name = "${var.prefix}-node-${count.index}"
+        created_by = "${lookup(var.tags,"created_by")}"
+    }
+
+    count = "${var.servers}"
 }
 
-resource "openstack_compute_keypair_v2" "appserver_keypair" {
-    name = "${var.prefix}-keypair"
-    region = "${var.region}"
-    public_key = "${var.public_key}"
-}
-
-resource "openstack_compute_instance_v2" "appserver_node" {
-  name = "${var.prefix}-node-${count.index}"
-  region = "${var.region}"
-  image_id = "${var.image_id}"
-  image_name = "${var.image_name}"
-  flavor_id = "${var.flavor_id}"
-  flavor_name = "${var.flavor_name}"
-  #floating_ip = "${element(openstack_compute_floatingip_v2.appserver_ip.*.address,count.index)}"
-  key_pair = "${var.prefix}-keypair"
-  count = "${var.servers}"
+resource "aws_eip" "appserver_eip" {
+    count = "${replace(var.create_eip, "1", var.servers)}"
+    instance = "${element(aws_instance.appserver_node.*.id, count.index)}"
 }

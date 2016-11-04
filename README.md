@@ -53,7 +53,7 @@ OpenStack Defaults
         pub_net_id = "${var.openstack_pub_net_id}"
     }
 
-    module "centos_provisioner" {
+    module "centos_app_provisioner" {
         source = "github.com/kzap/terraform-modules//provisioners/bash/centos-7/app-server"
         
         # Server Info
@@ -89,7 +89,7 @@ OpenStack Defaults
         pub_net_id = "${var.openstack_pub_net_id}"
     }
 
-    module "centos_provisioner" {
+    module "centos_db_provisioner" {
         source = "github.com/kzap/terraform-modules//provisioners/bash/centos-7/db-server"
         
         # Server Info

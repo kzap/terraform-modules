@@ -6,6 +6,7 @@ provider "openstack" {
 }
 
 resource "openstack_compute_keypair_v2" "appserver_keypair" {
+    count = "${signum(var.servers)}"
     name = "${var.prefix}-keypair"
     region = "${var.region}"
     public_key = "${var.public_key}"
@@ -20,6 +21,7 @@ resource "openstack_compute_floatingip_v2" "appserver_ip" {
 */
 
 resource "openstack_compute_instance_v2" "appserver_node" {
+    count = "${var.servers}"
     name = "${var.prefix}-node-${count.index}"
     region = "${var.region}"
     image_id = "${var.image_id}"
@@ -28,5 +30,4 @@ resource "openstack_compute_instance_v2" "appserver_node" {
     flavor_name = "${var.flavor_name}"
     #floating_ip = "${element(openstack_compute_floatingip_v2.appserver_ip.*.address, count.index)}"
     key_pair = "${var.prefix}-keypair"
-    count = "${var.servers}"
 }

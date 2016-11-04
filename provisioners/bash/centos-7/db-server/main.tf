@@ -13,6 +13,7 @@ resource "null_resource" "provision_db" {
             "echo ${var.servers} > /tmp/server-count",
             "echo ${count.index} > /tmp/server-index",
             "echo ${var.server_ips[count.index]} > /tmp/server-addr",
+            "echo ${element(var.server_ids, count.index)} > /tmp/server-id",
         ]
     }
 

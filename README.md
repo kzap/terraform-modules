@@ -211,6 +211,91 @@ OpenStack Defaults
     openstack_pub_net_id = "public"
 
 
+
+## Microsoft Azure
+
+### Inputs
+
+  * prefix - The prefix you want to label all your server nodes and other resources as, defaults to `apache`
+  * subscription_id - Your Azure Subscription Id
+  * client_id - Your Azure Active Directory App Id
+  * client_secret - Your Azure Active Directory Password / Secret
+  * tenant_id - Your Account or Tenant Id
+  * public_key - The contents of your public key you want to use for your key-pair
+  * key_file_path - The path to your private key of the above public key which will be used to login to the servers
+  * servers - The number of servers you want to spin up
+  
+Microsoft Azure Defaults
+
+  * location - The region you want to use for these resources
+  * vm_size - The type/size of VM you want to launch
+  * user_login - The default user that is used on the your Azure image
+  * image_publisher - The publisher of the image you want to use
+  * image_offer - The name of the image you want to use 
+  * image_sku - The release or ID of the image you want to use
+  * image_version - The version of the image you want to use
+
+### Outputs
+
+  * vm_pips - a list of the public ips of your server nodes
+  * vm_ids - a list of the Virtal Machine ids of your server nodes
+
+### [Azure Example](./examples/azure/single-server/azure_example.tf)
+
+    module "azure_app" {
+        source = "github.com/kzap/terraform-modules//providers/azure/app-server"
+
+        # Custom Config
+        servers = "${var.azure_servers}"
+        prefix = "${var.env}app"
+        public_key = "${file("${var.public_key_file}")}"
+        key_file_path = "${var.private_key_file}"
+        vm_size = "${var.azure_vm_size}"
+        user_login = "${var.azure_user_login}"
+        
+        # Azure config
+        subscription_id = "${var.azure_subscription_id}"
+        client_id = "${var.azure_client_id}"
+        client_secret = "${var.azure_client_secret}"
+        tenant_id = "${var.azure_tenant_id}"
+        location = "${var.azure_location}"
+    }
+
+    module "centos_app_provisioner" {
+        source = "github.com/kzap/terraform-modules//provisioners/bash/centos-7/app-db-server"
+        
+        # Server Info
+        servers = "${var.azure_servers}"
+        server_ips = ["${module.azure_app.vm_pips}"]
+        server_ids = ["${module.azure_app.vm_ids}"]
+
+        # Login Information
+        user_login = "${var.azure_user_login}"
+        public_key = "${file("${var.public_key_file}")}"
+        key_file_path = "${var.private_key_file}"
+    }
+
+    output "azure_app_ips" {
+        value = ["${module.azure_app.vm_pips}"]
+    }
+
+### [Azure Variables](./examples/azure/single-server/azure.sample.tfvars)
+
+    # Global Variables 
+    public_key_file = "/path/to/public-key"
+    private_key_file = "/path/to/private-key"
+
+    # Azure Provider Variables
+    azure_subscription_id = "YOUR_AZURE_SUBSCRIPTION_ID"
+    azure_client_id = "YOUR_AZURE_CLIENT_ID"
+    azure_client_secret = "YOUR_AZURE_CLIENT_SECRET"
+    azure_tenant_id = "YOUR_AZURE_TENANT_ID"
+    azure_location = "YOUR_AZURE_LOCATION"
+
+    # AWS Instance Variables
+    azure_servers = 1
+
+
 # LICENSE
 
 Apache2 - See the included LICENSE file for more information.

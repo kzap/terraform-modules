@@ -1,4 +1,10 @@
 
+0.3.1 / 2016-11-04
+==================
+
+  * update readme
+  * - making 2 seperate examples for openstack single server and multiple server
+
 0.3 / 2016-11-04
 ================
 

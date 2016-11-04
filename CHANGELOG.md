@@ -1,4 +1,10 @@
 
+0.3 / 2016-11-04
+================
+
+  * - updating example to use multiple servers and provisioners
+  * - adding provisioner from kzap/tf-apache - adding provisioner from kzap/tf-mysql
+
 0.2.5 / 2016-11-04
 ==================
 

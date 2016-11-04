@@ -1,6 +1,5 @@
 module "aws_app" {
-    #source = "github.com/kzap/terraform-modules//providers/aws/app-server"
-    source = "../../../providers/aws/app-server"
+    source = "github.com/kzap/terraform-modules//providers/aws/app-server"
 
     # Custom Config
     servers = "${var.aws_app_servers}"
@@ -37,8 +36,7 @@ output "aws_app_ips" {
 }
 
 module "aws_db" {
-    #source = "github.com/kzap/terraform-modules//providers/aws/app-server"
-    source = "../../../providers/aws/app-server"
+    source = "github.com/kzap/terraform-modules//providers/aws/app-server"
 
     # Custom Config
     servers = "${var.aws_db_servers}"

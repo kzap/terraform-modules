@@ -32,6 +32,10 @@ module "centos_app_provisioner" {
     key_file_path = "${var.private_key_file}"
 }
 
+output "aws_app_ips" {
+    value = ["${module.aws_app.ec2_ips}"]
+}
+
 module "aws_db" {
     #source = "github.com/kzap/terraform-modules//providers/aws/app-server"
     source = "../../../providers/aws/app-server"
@@ -64,4 +68,8 @@ module "centos_db_provisioner" {
     user_login = "${var.aws_db_user_login}"
     public_key = "${file("${var.public_key_file}")}"
     key_file_path = "${var.private_key_file}"
+}
+
+output "aws_db_ips" {
+    value = ["${module.aws_db.ec2_ips}"]
 }

@@ -10,9 +10,14 @@ resource "aws_instance" "appserver_node" {
     key_name = "${var.key_name}"
     instance_type = "${var.instance_type}"
     user_data = "${var.user_data}"
+
     tags {
         Name = "${var.prefix}-node-${count.index}"
         created_by = "${lookup(var.tags,"created_by")}"
+    }
+
+    root_block_device {
+        delete_on_termination = true
     }
 
     count = "${var.servers}"

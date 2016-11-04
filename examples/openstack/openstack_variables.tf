@@ -4,7 +4,7 @@ variable "openstack_tenant_name" {}
 
 variable "openstack_password" {}
 
-variable "openstack_app_servers" {
+variable "openstack_servers" {
     default = "2"
 }
 
@@ -28,10 +28,10 @@ variable "openstack_region" {
     description = "The region of openstack, for image/flavor/network lookups."
 }
 
-variable "openstack_app_image" {
+variable "openstack_image" {
     description = "Default image to use"
 }
 
-variable "openstack_app_flavor" {
+variable "openstack_flavor" {
     description = "Default flavor to use"
 }

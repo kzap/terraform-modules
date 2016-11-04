@@ -28,7 +28,7 @@ OpenStack Defaults
 
   * nodes_floating_ips - a list of the public ips of your server nodes
 
-### [OpenStack Example](./examples/openstack/openstack_example.tf)
+### [OpenStack Example](./examples/openstack/multiple-servers/openstack_example.tf)
 
     module "openstack_app" {
         source = "github.com/kzap/terraform-modules//providers/openstack/app-server"
@@ -53,7 +53,7 @@ OpenStack Defaults
         pub_net_id = "${var.openstack_pub_net_id}"
     }
 
-    module "centos_provisioner" {
+    module "centos_app_provisioner" {
         source = "github.com/kzap/terraform-modules//provisioners/bash/centos-7/app-server"
         
         # Server Info
@@ -89,7 +89,7 @@ OpenStack Defaults
         pub_net_id = "${var.openstack_pub_net_id}"
     }
 
-    module "centos_provisioner" {
+    module "centos_db_provisioner" {
         source = "github.com/kzap/terraform-modules//provisioners/bash/centos-7/db-server"
         
         # Server Info
@@ -102,7 +102,7 @@ OpenStack Defaults
         key_file_path = "${var.private_key_file}"
     }
 
-### [OpenStack Variables](./examples/openstack/openstack.sample.tfvars)
+### [OpenStack Variables](./examples/openstack/multiple-servers/openstack.sample.tfvars)
 
     # Global Variables 
     public_key_file = "/path/to/public-key"

@@ -10,6 +10,7 @@ variable "aws_app_azs" {
 }
 
 variable "aws_app_ami_id" {
+    # CentOS 7 AMI: https://aws.amazon.com/marketplace/pp/B00O7WM7QW
     default = "ami-d2c924b2"
     description = "Default AMI to use for app servers"
 }
@@ -30,7 +31,7 @@ variable "aws_app_create_eip" {
 }
 
 variable "aws_app_user_login" {
-    default = "root"
+    default = "centos"
     description = "Default login for this image"
 }
 
@@ -46,6 +47,7 @@ variable "aws_db_azs" {
 }
 
 variable "aws_db_ami_id" {
+    # CentOS 7 AMI: https://aws.amazon.com/marketplace/pp/B00O7WM7QW
     default = "ami-d2c924b2"
     description = "Default AMI to use for db servers"
 }
@@ -66,7 +68,7 @@ variable "aws_db_create_eip" {
 }
 
 variable "aws_db_user_login" {
-    default = "root"
+    default = "centos"
     description = "Default login for this image"
 }
 
@@ -78,4 +80,8 @@ variable "aws_secret_key" {}
 variable "aws_region" {
     default = "us-west-2"
     description = "The region of AWS"
+}
+
+variable "aws_key_name" {
+    description = "The AWS keypair name of the public key you wish to use"
 }

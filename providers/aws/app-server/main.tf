@@ -7,6 +7,7 @@ provider "aws" {
 resource "aws_instance" "appserver_node" {
     ami = "${var.ami_id}"
     availability_zone = "${element(var.azs, count.index)}"
+    key_name = "${var.key_name}"
     instance_type = "${var.instance_type}"
     user_data = "${var.user_data}"
     tags {

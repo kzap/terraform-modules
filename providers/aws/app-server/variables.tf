@@ -8,6 +8,7 @@ variable "secret_key" {}
 
 # Instance Variables
 variable "ami_id" {
+    # CentOS 7 AMI: https://aws.amazon.com/marketplace/pp/B00O7WM7QW
     default = "ami-d2c924b2"
     description = "The ID of the AMI to use"
 }
@@ -21,6 +22,11 @@ variable "azs" {
 variable "subnet_id" {
     default = ""
     description = "The VPC subnet the instance(s) will go in"
+}
+
+variable "key_name" {
+    default = ""
+    description = "The name of they AWS keypair to access the instance"
 }
 
 variable "instance_type" {

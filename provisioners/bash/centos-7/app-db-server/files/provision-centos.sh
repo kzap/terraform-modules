@@ -424,15 +424,6 @@ nginx_setup() {
     vvvgenrsa="$(openssl genrsa -out /etc/nginx/server.key 2048 2>&1)"
     echo "$vvvgenrsa"
   fi
-  if [[ ! -e /etc/nginx/server.crt ]]; then
-    echo "Sign the certificate using the above private key..."
-    vvvsigncert="$(openssl req -new -x509 \
-            -key /etc/nginx/server.key \
-            -out /etc/nginx/server.crt \
-            -days 3650 \
-            -subj /CN=*.galleonph.dev/CN=*.galleonph.dashboard/CN=*.vvv.dev 2>&1)"
-    echo "$vvvsigncert"
-  fi
 
   echo -e "\nSetup configuration files..."
 
@@ -483,15 +474,6 @@ apache_setup() {
     echo "Generate Apache server private key..."
     vvvgenrsa="$(sudo openssl genrsa -out /etc/pki/tls/private/server.key 2048 2>&1)"
     echo "$vvvgenrsa"
-  fi
-  if [[ ! -e /etc/pki/tls/certs/server.crt ]]; then
-    echo "Sign the certificate using the above private key..."
-    vvvsigncert="$(sudo openssl req -new -x509 \
-            -key /etc/pki/tls/private/server.key \
-            -out /etc/pki/tls/certs/server.crt \
-            -days 3650 \
-            -subj /CN=*.galleonph.dev/CN=*.galleonph.dashboard/CN=*.vvv.dev 2>&1)"
-    echo "$vvvsigncert"
   fi
 
   echo -e "\nSetup configuration files..."

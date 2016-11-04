@@ -54,7 +54,7 @@ OpenStack Defaults
     }
 
     module "centos_provisioner" {
-      source = "github.com/kzap/tf-lamp//provisioners/bash/centos7/app-db-server"
+      source = "github.com/kzap/tf-lamp//provisioners/bash/centos-7/app-db-server"
       
       # Server Info
       servers = "${var.openstack_app_servers}"

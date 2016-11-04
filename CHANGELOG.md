@@ -1,4 +1,9 @@
 
+0.3.2 / 2016-11-04
+==================
+
+  * giving examples output so they can be used as modules
+
 0.3.1 / 2016-11-04
 ==================
 

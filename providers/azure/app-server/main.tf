@@ -56,7 +56,7 @@ resource "azurerm_public_ip" "appserver_pip" {
 
 resource "azurerm_storage_account" "appserver_sa" {
     count = "${var.servers}"
-    name = "${var.prefix}Storage${count.index}"
+    name = "${var.prefix}storage${count.index}"
     resource_group_name = "${azurerm_resource_group.appserver_rg.name}"
     location = "${var.location}"
     account_type = "Standard_LRS"

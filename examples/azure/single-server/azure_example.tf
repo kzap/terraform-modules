@@ -1,6 +1,5 @@
 module "azure_app" {
-    #source = "github.com/kzap/terraform-modules//providers/azure/app-server"
-    source = "../../../providers/azure/app-server"
+    source = "github.com/kzap/terraform-modules//providers/azure/app-server"
 
     # Custom Config
     servers = "${var.azure_servers}"
@@ -19,8 +18,7 @@ module "azure_app" {
 }
 
 module "centos_app_provisioner" {
-    #source = "github.com/kzap/terraform-modules//provisioners/bash/centos-7/app-db-server"
-    source = "../../../provisioners/bash/centos-7/app-db-server"
+    source = "github.com/kzap/terraform-modules//provisioners/bash/centos-7/app-db-server"
     
     # Server Info
     servers = "${var.azure_servers}"

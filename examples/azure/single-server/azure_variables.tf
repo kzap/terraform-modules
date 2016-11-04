@@ -1,14 +1,14 @@
-variable "azure_app_servers" {
+variable "azure_servers" {
     default = 2
     description = "The # of app servers you wish to launch"
 }
 
-variable "azure_app_vm_size" {
+variable "azure_vm_size" {
     default = "Standard_A0"
     description = "Size of the VM. See https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-windows-sizes/"
 }
 
-variable "azure_app_user_login" {
+variable "azure_user_login" {
     default = "centos"
     description = "Default login for this server"
 }

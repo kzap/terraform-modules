@@ -100,11 +100,15 @@ resource "azurerm_virtual_machine" "appserver_vm" {
     os_profile {
         computer_name = "${var.prefix}-vm"
         admin_username = "${var.user_login}"
-        admin_password = "Password1234!"
+        admin_password = "${var.user_password}"
     }
 
     os_profile_linux_config {
-        disable_password_authentication = false
+        disable_password_authentication = true
+        ssh_keys {
+            path = "/home/${var.user_login}/.ssh/authorized_keys"
+            key_data = "${var.public_key}"
+        }
     }
 
     tags {

@@ -34,6 +34,11 @@ variable "user_login" {
     description = "Default login for this image"
 }
 
+variable "user_password" {
+    default = "Password1234!"
+    description = "Default password for this image"
+}
+
 # Images to use
 # See https://github.com/Azure/azure-quickstart-templates/blob/master/101-vm-simple-windows/azuredeploy.json
 variable "image_publisher" {

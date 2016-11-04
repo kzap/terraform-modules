@@ -1,4 +1,13 @@
 
+0.4 / 2016-11-04
+================
+
+  * - updating readme with AWS example - setting AWS example source to github
+  * - add output to aws examples - add root_block_device.delete_on_termination = true
+  * - completed aws server provider - done with examples for single server and multiple servers - for now it uses an existing keypair with default security group - using create_eip = true will fail because the wrong ips are passed to the provisioner
+  * - attempting AWS server creation
+  * initial code for aws, basing on openstack template
+
 0.3.2 / 2016-11-04
 ==================
 

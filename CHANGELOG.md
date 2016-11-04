@@ -1,4 +1,14 @@
 
+0.5 / 2016-11-05
+================
+
+  * - use github sources - fix name in azure app-server
+  * - making multiple storage accounts per server
+  * update readme
+  * - working example for azure with ssh private key and multiple servers
+  * - working azure example - working azure provider - add server_ids to provisioners so we can make the provisioner depend on the instance/vm and not just the ip - only setup certain resources if servers > 0 using signum
+  * adding azure based on aws files as a template for now
+
 0.4 / 2016-11-04
 ================
 

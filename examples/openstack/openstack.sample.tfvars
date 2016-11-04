@@ -7,9 +7,9 @@ openstack_username = "YOUR_OPENSTACK_USERNAME"
 openstack_tenant_name = "YOUR_OPENSTACK_TENANT_NAME"
 openstack_password = "YOUR_OPENSTACK_PASSWORD"
 openstack_region = "YOUR_OPENSTACK_REGION"
-openstack_app_servers = 1
-openstack_app_image = "YOUR_OPENSTACK_PROVIDER_IMAGE"
-openstack_app_flavor = "YOUR_OPENSTACK_PROVIDER_FLAVOR"
+openstack_servers = 1
+openstack_image = "YOUR_OPENSTACK_PROVIDER_IMAGE"
+openstack_flavor = "YOUR_OPENSTACK_PROVIDER_FLAVOR"
 
 # OpenStack Provider Variables
 openstack_user_login = "root"

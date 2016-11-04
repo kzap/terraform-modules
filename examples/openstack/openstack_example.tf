@@ -1,5 +1,5 @@
 module "openstack_app" {
-    source = "github.com/kzap/tf-lamp//providers/openstack"
+    source = "github.com/kzap/tf-lamp//providers/openstack/app-server"
     
     # Custom Config
     prefix = "${var.env}-app"
@@ -22,7 +22,7 @@ module "openstack_app" {
 }
 
 module "centos_provisioner" {
-    source = "github.com/kzap/tf-lamp//provisioners/bash/centos7"
+    source = "github.com/kzap/tf-lamp//provisioners/bash/centos7/app-db-server"
     
     # Server Info
     servers = "${var.openstack_app_servers}"

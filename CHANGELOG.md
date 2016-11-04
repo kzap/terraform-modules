@@ -1,4 +1,10 @@
 
+0.2.2 / 2016-11-04
+==================
+
+  * - moving openstack provider for a server into app-server/ directory
+  * - moving provisioning files into app-db-server/ directory for a LAMP stack, so we can host multiple types of provisioning scripts
+
 0.2.1 / 2016-11-03
 ==================
 

@@ -1,7 +1,7 @@
-# tf-lamp
+# Terraform Modules
 
-Terraform module for provisioning a CentOS 7 install on an OpenStack cloud with a LAMP stack (Linux Apache MySQL PHP)
-At the moment a OpenStack provider is available with a bash provisioner for CentOS 7.
+Terraform modules for provisioning a CentOS 7 install on an OpenStack cloud.
+At the moment a OpenStack provider is available with a bash provisioners for CentOS 7.
 
 ## OpenStack
 
@@ -31,39 +31,75 @@ OpenStack Defaults
 ### [OpenStack Example](./examples/openstack/openstack_example.tf)
 
     module "openstack_app" {
-      source = "github.com/kzap/tf-lamp//providers/openstack/app-server"
-      
-      # Custom Config
-      prefix = "${var.env}-app"
-      public_key = "${file("${var.public_key_file}")}"
-      key_file_path = "${var.private_key_file}"
-      servers = "${var.openstack_servers}"
-      
-      # OpenStack config
-      username = "${var.openstack_username}"
-      tenant_name = "${var.openstack_tenant_name}"
-      password = "${var.openstack_password}"
-      region = "${var.openstack_region}"
-      image_id = "${var.openstack_image}"
-      flavor_id = "${var.openstack_flavor}"
+        source = "github.com/kzap/terraform-modules//providers/openstack/app-server"
+        
+        # Custom Config
+        prefix = "${var.env}-app"
+        public_key = "${file("${var.public_key_file}")}"
+        key_file_path = "${var.private_key_file}"
+        servers = "${var.openstack_app_servers}"
+        
+        # OpenStack config
+        username = "${var.openstack_username}"
+        tenant_name = "${var.openstack_tenant_name}"
+        password = "${var.openstack_password}"
+        region = "${var.openstack_region}"
+        image_id = "${var.openstack_app_image}"
+        flavor_id = "${var.openstack_app_flavor}"
 
-      # OpenStack defaults
-      auth_url = "${var.openstack_auth_url}"
-      user_login = "${var.openstack_user_login}"
-      pub_net_id = "${var.openstack_pub_net_id}"
+        # OpenStack defaults
+        auth_url = "${var.openstack_auth_url}"
+        user_login = "${var.openstack_user_login}"
+        pub_net_id = "${var.openstack_pub_net_id}"
     }
 
     module "centos_provisioner" {
-      source = "github.com/kzap/tf-lamp//provisioners/bash/centos-7/app-db-server"
-      
-      # Server Info
-      servers = "${var.openstack_servers}"
-      server_ips = ["${module.openstack_app.nodes_floating_ips}"]
+        source = "github.com/kzap/terraform-modules//provisioners/bash/centos-7/app-server"
+        
+        # Server Info
+        servers = "${var.openstack_app_servers}"
+        server_ips = ["${module.openstack_app.nodes_floating_ips}"]
 
-      # Login Information
-      user_login = "${var.openstack_user_login}"
-      public_key = "${file("${var.public_key_file}")}"
-      key_file_path = "${var.private_key_file}"
+        # Login Information
+        user_login = "${var.openstack_user_login}"
+        public_key = "${file("${var.public_key_file}")}"
+        key_file_path = "${var.private_key_file}"
+    }
+
+    module "openstack_db" {
+        source = "github.com/kzap/terraform-modules//providers/openstack/app-server"
+        
+        # Custom Config
+        prefix = "${var.env}-db"
+        public_key = "${file("${var.public_key_file}")}"
+        key_file_path = "${var.private_key_file}"
+        servers = "${var.openstack_db_servers}"
+        
+        # OpenStack config
+        username = "${var.openstack_username}"
+        tenant_name = "${var.openstack_tenant_name}"
+        password = "${var.openstack_password}"
+        region = "${var.openstack_region}"
+        image_id = "${var.openstack_db_image}"
+        flavor_id = "${var.openstack_db_flavor}"
+
+        # OpenStack defaults
+        auth_url = "${var.openstack_auth_url}"
+        user_login = "${var.openstack_user_login}"
+        pub_net_id = "${var.openstack_pub_net_id}"
+    }
+
+    module "centos_provisioner" {
+        source = "github.com/kzap/terraform-modules//provisioners/bash/centos-7/db-server"
+        
+        # Server Info
+        servers = "${var.openstack_db_servers}"
+        server_ips = ["${module.openstack_db.nodes_floating_ips}"]
+
+        # Login Information
+        user_login = "${var.openstack_user_login}"
+        public_key = "${file("${var.public_key_file}")}"
+        key_file_path = "${var.private_key_file}"
     }
 
 ### [OpenStack Variables](./examples/openstack/openstack.sample.tfvars)
@@ -77,9 +113,12 @@ OpenStack Defaults
     openstack_tenant_name = "YOUR_OPENSTACK_TENANT_NAME"
     openstack_password = "YOUR_OPENSTACK_PASSWORD"
     openstack_region = "YOUR_OPENSTACK_REGION"
-    openstack_servers = 1
-    openstack_image = "YOUR_OPENSTACK_PROVIDER_IMAGE"
-    openstack_flavor = "YOUR_OPENSTACK_PROVIDER_FLAVOR"
+    openstack_app_servers = 2
+    openstack_app_image = "YOUR_OPENSTACK_PROVIDER_IMAGE"
+    openstack_app_flavor = "YOUR_OPENSTACK_PROVIDER_FLAVOR"
+    openstack_db_servers = 1
+    openstack_db_image = "YOUR_OPENSTACK_PROVIDER_IMAGE"
+    openstack_db_flavor = "YOUR_OPENSTACK_PROVIDER_FLAVOR"
 
     # OpenStack Provider Variables
     openstack_user_login = "root"

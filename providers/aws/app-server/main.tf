@@ -5,6 +5,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "appserver_node" {
+    count = "${var.servers}"
     ami = "${var.ami_id}"
     availability_zone = "${element(var.azs, count.index)}"
     key_name = "${var.key_name}"
@@ -19,8 +20,6 @@ resource "aws_instance" "appserver_node" {
     root_block_device {
         delete_on_termination = true
     }
-
-    count = "${var.servers}"
 }
 
 resource "aws_eip" "appserver_eip" {

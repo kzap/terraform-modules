@@ -24,6 +24,7 @@ module "centos_app_provisioner" {
     # Server Info
     servers = "${var.aws_servers}"
     server_ips = ["${module.aws_app.ec2_ips}"]
+    server_ids = ["${module.aws_app.ec2_ids}"]
 
     # Login Information
     user_login = "${var.aws_user_login}"

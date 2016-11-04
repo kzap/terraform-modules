@@ -1,11 +1,7 @@
-output "ec2_ips" {
-	value = ["${aws_instance.appserver_node.*.public_ip}"]
+output "vm_ids" {
+	value = ["${azurerm_virtual_machine.appserver_vm.*.id}"]
 }
 
-output "ec2_eips" {
-	value = ["${aws_eip.appserver_eip.*.public_ip}"]
-}
-
-output "ec2_ids" {
-	value = ["${aws_instance.appserver_node.*.id}"]
+output "vm_pips" {
+	value = ["${azurerm_public_ip.appserver_pip.*.ip_address}"]
 }

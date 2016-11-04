@@ -1,29 +1,114 @@
-provider "aws" {
-    region = "${var.region}"
-    access_key = "${var.access_key}"
-    secret_key = "${var.secret_key}"
+provider "azurerm" {
+    subscription_id = "${var.subscription_id}"
+    client_id = "${var.client_id}"
+    client_secret = "${var.client_secret}"
+    tenant_id = "${var.tenant_id}"
 }
 
-resource "aws_instance" "appserver_node" {
-    ami = "${var.ami_id}"
-    availability_zone = "${element(var.azs, count.index)}"
-    key_name = "${var.key_name}"
-    instance_type = "${var.instance_type}"
-    user_data = "${var.user_data}"
+resource "azurerm_resource_group" "appserver_rg" {
+    count = "${signum(var.servers)}"
+    name = "${var.prefix}-${md5("${var.prefix}")}-rg"
+    location = "${var.location}"
+}
+
+resource "azurerm_virtual_network" "appserver_vnet" {
+    count = "${signum(var.servers)}"
+    name = "${var.prefix}-${md5("${var.prefix}")}-vnet"
+    address_space = ["10.0.0.0/16"]
+    location = "${var.location}"
+    resource_group_name = "${azurerm_resource_group.appserver_rg.name}"
+}
+
+resource "azurerm_subnet" "appserver_snet" {
+    count = "${signum(var.servers)}"
+    name = "${var.prefix}-${md5("${var.prefix}")}-snet"
+    resource_group_name = "${azurerm_resource_group.appserver_rg.name}"
+    virtual_network_name = "${azurerm_virtual_network.appserver_vnet.name}"
+    address_prefix = "10.0.2.0/24"
+}
+
+resource "azurerm_network_interface" "appserver_nic" {
+    count = "${var.servers}"
+    name = "${var.prefix}-${md5("${var.prefix}")}-nic-${count.index}"
+    location = "${var.location}"
+    resource_group_name = "${azurerm_resource_group.appserver_rg.name}"
+
+    ip_configuration {
+        name = "${var.prefix}-configuration"
+        subnet_id = "${azurerm_subnet.appserver_snet.id}"
+        private_ip_address_allocation = "dynamic"
+        public_ip_address_id = "${element(azurerm_public_ip.appserver_pip.*.id, count.index)}"
+    }
+}
+
+resource "azurerm_public_ip" "appserver_pip" {
+    count = "${var.servers}"
+    name = "${var.prefix}-${md5("${var.prefix}")}-pip-${count.index}"
+    location = "${var.location}"
+    resource_group_name = "${azurerm_resource_group.appserver_rg.name}"
+    public_ip_address_allocation = "static"
 
     tags {
-        Name = "${var.prefix}-node-${count.index}"
+        environment = "${lookup(var.tags,"environment")}"
         created_by = "${lookup(var.tags,"created_by")}"
     }
-
-    root_block_device {
-        delete_on_termination = true
-    }
-
-    count = "${var.servers}"
 }
 
-resource "aws_eip" "appserver_eip" {
-    count = "${replace(var.create_eip, "1", var.servers)}"
-    instance = "${element(aws_instance.appserver_node.*.id, count.index)}"
+resource "azurerm_storage_account" "appserver_sa" {
+    count = "${signum(var.servers)}"
+    name = "${var.prefix}testtest"
+    resource_group_name = "${azurerm_resource_group.appserver_rg.name}"
+    location = "${var.location}"
+    account_type = "Standard_LRS"
+
+    tags {
+        environment = "${lookup(var.tags,"environment")}"
+        created_by = "${lookup(var.tags,"created_by")}"
+    }
+}
+
+resource "azurerm_storage_container" "appserver_vhds" {
+    count = "${var.servers}"
+    name = "${var.prefix}-${md5("${var.prefix}")}-vhds"
+    resource_group_name = "${azurerm_resource_group.appserver_rg.name}"
+    storage_account_name = "${azurerm_storage_account.appserver_sa.name}"
+    container_access_type = "private"
+}
+
+resource "azurerm_virtual_machine" "appserver_vm" {
+    count = "${var.servers}"
+    name = "${var.prefix}-${md5("${var.prefix}")}-vm-${count.index}"
+    location = "${var.location}"
+    resource_group_name = "${azurerm_resource_group.appserver_rg.name}"
+    network_interface_ids = ["${element(azurerm_network_interface.appserver_nic.*.id, count.index)}"]
+    vm_size = "${var.vm_size}"
+
+    storage_image_reference {
+        publisher = "${var.image_publisher}"
+        offer = "${var.image_offer}"
+        sku = "${var.image_sku}"
+        version = "${var.image_version}"
+    }
+
+    storage_os_disk {
+        name = "myosdisk1"
+        vhd_uri = "${azurerm_storage_account.appserver_sa.primary_blob_endpoint}${element(azurerm_storage_container.appserver_vhds.*.name, count.index)}/myosdisk1.vhd"
+        caching = "ReadWrite"
+        create_option = "FromImage"
+    }
+
+    os_profile {
+        computer_name = "${var.prefix}-vm"
+        admin_username = "${var.user_login}"
+        admin_password = "Password1234!"
+    }
+
+    os_profile_linux_config {
+        disable_password_authentication = false
+    }
+
+    tags {
+        environment = "${lookup(var.tags,"environment")}"
+        created_by = "${lookup(var.tags,"created_by")}"
+    }
 }

@@ -1,46 +1,16 @@
-# AWS Provider Variables
-variable "region" {
-    default = "us-west-2"
-    description = "The region of AWS"
+# Azure Provider Variables
+variable "subscription_id" {}
+variable "client_id" {}
+variable "client_secret" {}
+variable "tenant_id" {}
+variable "location" {
+    default = "West US"
 }
-variable "access_key" {}
-variable "secret_key" {}
 
 # Instance Variables
-variable "ami_id" {
-    # CentOS 7 AMI: https://aws.amazon.com/marketplace/pp/B00O7WM7QW
-    default = "ami-d2c924b2"
-    description = "The ID of the AMI to use"
-}
-
-variable "azs" { 
-    type = "list"
-    default = ["us-west-2a"]
-    description = "A list of availability zones for your region that you want to put your instances on"
-}
-
-variable "subnet_id" {
-    default = ""
-    description = "The VPC subnet the instance(s) will go in"
-}
-
-variable "key_name" {
-    default = ""
-    description = "The name of they AWS keypair to access the instance"
-}
-
-variable "instance_type" {
-    default = "t2.micro"
-    description = "The instance you wish to launch"
-}
-
-variable "user_data" {
-    default = ""
-    description = "A string of user_data for this server"
-}
-
 variable "tags" {
     default = {
+        environment = "staging"
         created_by = "terraform"
     }
 }
@@ -54,11 +24,38 @@ variable "servers" {
     description = "The number of App servers to launch."
 }
 
+variable "vm_size" {
+    default = "Standard_A0"
+    description = "Size of the VM. See https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-windows-sizes/"
+}
+
+variable "user_login" {
+    default = "centos"
+    description = "Default login for this image"
+}
+
+# Images to use
+# See https://github.com/Azure/azure-quickstart-templates/blob/master/101-vm-simple-windows/azuredeploy.json
+variable "image_publisher" {
+    default = "OpenLogic"
+    description = "OS Image Publisher"
+}
+
+variable "image_offer" {
+    default = "CentOS"
+    description = "OS Image Offer"
+}
+
+variable "image_sku" {
+    default = "7.2"
+    description = "OS Image SKU"
+}
+
+variable "image_version" {
+   default = "latest"
+   description = "OS Image Version"
+}
+
 variable "public_key" {}
 
 variable "key_file_path" {}
-
-variable "create_eip" {
-    default = false
-    description = "Whether or not to attach an Elastic IP to this instance"
-}

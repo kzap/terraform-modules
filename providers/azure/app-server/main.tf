@@ -55,8 +55,8 @@ resource "azurerm_public_ip" "appserver_pip" {
 }
 
 resource "azurerm_storage_account" "appserver_sa" {
-    count = "${signum(var.servers)}"
-    name = "${var.prefix}testtest"
+    count = "${var.servers}"
+    name = "${var.prefix}Storage${count.index}"
     resource_group_name = "${azurerm_resource_group.appserver_rg.name}"
     location = "${var.location}"
     account_type = "Standard_LRS"
@@ -71,7 +71,7 @@ resource "azurerm_storage_container" "appserver_vhds" {
     count = "${var.servers}"
     name = "${var.prefix}-${md5("${var.prefix}")}-vhds"
     resource_group_name = "${azurerm_resource_group.appserver_rg.name}"
-    storage_account_name = "${azurerm_storage_account.appserver_sa.name}"
+    storage_account_name = "${element(azurerm_storage_account.appserver_sa.*.name, count.index)}"
     container_access_type = "private"
 }
 
@@ -92,7 +92,7 @@ resource "azurerm_virtual_machine" "appserver_vm" {
 
     storage_os_disk {
         name = "myosdisk1"
-        vhd_uri = "${azurerm_storage_account.appserver_sa.primary_blob_endpoint}${element(azurerm_storage_container.appserver_vhds.*.name, count.index)}/myosdisk1.vhd"
+        vhd_uri = "${element(azurerm_storage_account.appserver_sa.*.primary_blob_endpoint, count.index)}${element(azurerm_storage_container.appserver_vhds.*.name, count.index)}/myosdisk1.vhd"
         caching = "ReadWrite"
         create_option = "FromImage"
     }

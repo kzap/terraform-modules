@@ -34,6 +34,10 @@ module "centos_app_provisioner" {
     key_file_path = "${var.private_key_file}"
 }
 
+output "openstack_app_ips" {
+    value = ["${module.openstack_app.nodes_floating_ips}"]
+}
+
 module "openstack_db" {
     source = "github.com/kzap/terraform-modules//providers/openstack/app-server"
     
@@ -68,4 +72,8 @@ module "centos_db_provisioner" {
     user_login = "${var.openstack_user_login}"
     public_key = "${file("${var.public_key_file}")}"
     key_file_path = "${var.private_key_file}"
+}
+
+output "openstack_db_ips" {
+    value = ["${module.openstack_db.nodes_floating_ips}"]
 }

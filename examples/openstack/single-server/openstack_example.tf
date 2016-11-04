@@ -33,3 +33,7 @@ module "centos_provisioner" {
     public_key = "${file("${var.public_key_file}")}"
     key_file_path = "${var.private_key_file}"
 }
+
+output "openstack_app_ips" {
+    value = ["${module.openstack_app.nodes_floating_ips}"]
+}

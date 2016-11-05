@@ -1,4 +1,9 @@
 
+0.5.1 / 2016-11-06
+==================
+
+  * - making a seperate user_login variable for each openstack server in the multiple server example
+
 0.5 / 2016-11-05
 ================
 

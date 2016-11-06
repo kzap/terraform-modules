@@ -1,4 +1,10 @@
 
+0.6 / 2016-11-06
+================
+
+  * update readme
+  * - adding example for multiple providers in 1 module
+
 0.5.1 / 2016-11-06
 ==================
 

@@ -89,15 +89,14 @@ variable "aws_key_name" {
 
 
 # OpenStack
-variable "openstack_username" {}
-
-variable "openstack_tenant_name" {}
-
-variable "openstack_password" {}
-
 variable "openstack_app_servers" {
     default = "2"
     description = "The # of app servers you wish to launch"
+}
+
+variable "openstack_app_user_login" {
+    default = "root"
+    description = "Default login for this image"
 }
 
 variable "openstack_app_image" {
@@ -113,6 +112,11 @@ variable "openstack_db_servers" {
     description = "The # of db servers you wish to launch"
 }
 
+variable "openstack_db_user_login" {
+    default = "root"
+    description = "Default login for this image"
+}
+
 variable "openstack_db_image" {
     description = "Default image to use for db servers"
 }
@@ -122,6 +126,12 @@ variable "openstack_db_flavor" {
 }
 
 # OpenStack Provider Defaults
+variable "openstack_username" {}
+
+variable "openstack_tenant_name" {}
+
+variable "openstack_password" {}
+
 variable "openstack_auth_url" {
     description = "The url to your OpenStack Provider's identity service"
 }

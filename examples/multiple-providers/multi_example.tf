@@ -1,6 +1,5 @@
 module "aws_multi" {
-    #source = "github.com/kzap/terraform-modules//examples/aws/multiple-servers/"
-    source = "../aws/multiple-servers/"
+    source = "github.com/kzap/terraform-modules//examples/aws/multiple-servers/"
 
     # Custom Config
     env = "${var.env}"
@@ -29,8 +28,7 @@ output "aws_app_ips" {
 }
 
 module "openstack_multi" {
-    #source = "github.com/kzap/terraform-modules//examples/openstack/multiple-servers/"
-    source = "../openstack/multiple-servers/"
+    source = "github.com/kzap/terraform-modules//examples/openstack/multiple-servers/"
     
     # Custom Config
     env = "${var.env}"
@@ -38,10 +36,12 @@ module "openstack_multi" {
     private_key_file = "${var.private_key_file}"
 
     openstack_app_servers = "${var.openstack_app_servers}"
+    openstack_app_user_login = "${var.openstack_app_user_login}"
     openstack_app_image = "${var.openstack_app_image}"
     openstack_app_flavor = "${var.openstack_app_flavor}"
 
     openstack_db_servers = "${var.openstack_db_servers}"
+    openstack_db_user_login = "${var.openstack_db_user_login}"
     openstack_db_image = "${var.openstack_db_image}"
     openstack_db_flavor = "${var.openstack_db_flavor}"
 
@@ -51,7 +51,6 @@ module "openstack_multi" {
     openstack_password = "${var.openstack_password}"
     openstack_region = "${var.openstack_region}"
     openstack_auth_url = "${var.openstack_auth_url}"
-    openstack_user_login = "${var.openstack_user_login}"
     openstack_pub_net_id = "${var.openstack_pub_net_id}"
 }
 
@@ -60,8 +59,7 @@ output "openstack_app_ips" {
 }
 
 module "azure_multi" {
-    #source = "github.com/kzap/terraform-modules//examples/azure/multiple-servers/"
-    source = "../azure/multiple-servers/"
+    source = "github.com/kzap/terraform-modules//examples/azure/multiple-servers/"
 
     # Custom Config
     env = "${var.env}"

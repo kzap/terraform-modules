@@ -2,8 +2,7 @@
 public_key_file = "/path/to/public-key"
 private_key_file = "/path/to/private-key"
 
-# OpenStack User Variables
-
+# OpenStack Instance Variables
 openstack_app_servers = 2
 openstack_app_user_login = "root"
 openstack_app_image = "YOUR_OPENSTACK_PROVIDER_IMAGE"
